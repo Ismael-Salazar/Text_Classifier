@@ -235,15 +235,8 @@ class TrigramModel(object):
         
         for sentence in corpus:
             logSentenceProbabilitySum += self.sentence_logprob(sentence)
-        
-        #Counts words in Brown corpus.
-        total = 0
-        with open(sys.argv[2],"r") as f: 
-            for line in f: 
-                words = line.split(" ")
-                total += len(words)
-        
-        l = (1/total) * logSentenceProbabilitySum
+
+        l = (1/self.wordCount) * logSentenceProbabilitySum
         
         return 2**(-l)
 
@@ -293,18 +286,7 @@ def essay_scoring_experiment(training_file1, training_file2, testdir1, testdir2)
     return (correct/total)
 
 if __name__ == "__main__":
-    
-    #Example of the function get_ngrams.
-    #print(get_ngrams(["natural","language","processing","is", "fun", "for", "me"],4))
-
-    
-    #Perplexity example.
-    #dev_corpus = corpus_reader(sys.argv[2], model.lexicon)
-    #pp = model.perplexity(dev_corpus)
-    #print(pp)
-
 
     #Essay scoring experiment: 
     accuracy = 100 * essay_scoring_experiment('train_high.txt', 'train_low.txt', 'test_high', 'test_low')
     print("This text classifier, when tested on unseen essays, has an accuracy of " + str(round(accuracy,4)) + "%")
-
